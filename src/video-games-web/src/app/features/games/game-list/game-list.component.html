@@ -1,0 +1,48 @@
+<div class="container py-4">
+  <h1 class="h3 mb-3">Video Games</h1>
+
+  <input class="form-control mb-3" type="search" placeholder="Search title, platform or genre…"
+         [value]="search()" (input)="onSearch($any($event.target).value)" />
+
+  @if (state().error) {
+    <div class="alert alert-danger">Could not load games.</div>
+  }
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th role="button" (click)="sort('title')">Title</th>
+          <th>Platform</th>
+          <th>Genre</th>
+          <th role="button" (click)="sort('releaseDate')">Released</th>
+          <th role="button" class="text-end" (click)="sort('rating')">Rating</th>
+          <th role="button" class="text-end" (click)="sort('price')">Price</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (game of state().result?.items ?? []; track game.id) {
+          <tr>
+            <td>{{ game.title }}</td>
+            <td>{{ game.platform }}</td>
+            <td>{{ game.genre }}</td>
+            <td>{{ game.releaseDate | date }}</td>
+            <td class="text-end">{{ game.rating ?? '–' }}</td>
+            <td class="text-end">{{ game.price | currency }}</td>
+            <td class="text-end"><a class="btn btn-sm btn-outline-primary" [routerLink]="['/games', game.id]">Edit</a></td>
+          </tr>
+        } @empty {
+          @if (!state().loading) {
+            <tr><td colspan="7" class="text-center text-muted">No games found.</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (state().result; as r) {
+    <ngb-pagination [collectionSize]="r.totalCount" [pageSize]="pageSize"
+                    [page]="page()" (pageChange)="page.set($event)" [maxSize]="5" [rotate]="true" />
+  }
+</div>

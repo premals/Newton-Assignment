@@ -1,0 +1,60 @@
+<div class="container py-4" style="max-width: 640px">
+  <a routerLink="/games">&larr; Back to catalogue</a>
+  <h1 class="h3 my-3">Edit Game</h1>
+
+  @if (error(); as message) {
+    <ngb-alert type="danger" (closed)="error.set(null)">
+      {{ message }} <button type="button" class="btn btn-link p-0 align-baseline" (click)="load()">Reload</button>
+    </ngb-alert>
+  }
+
+  @if (!loading()) {
+    <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input id="title" class="form-control" formControlName="title" [class.is-invalid]="isInvalid('title')" />
+        <div class="invalid-feedback">Title is required (max 200 characters).</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="platform">Platform</label>
+          <input id="platform" class="form-control" formControlName="platform" [class.is-invalid]="isInvalid('platform')" />
+          <div class="invalid-feedback">Platform is required.</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label" for="genre">Genre</label>
+          <input id="genre" class="form-control" formControlName="genre" [class.is-invalid]="isInvalid('genre')" />
+          <div class="invalid-feedback">Genre is required.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="developer">Developer</label>
+        <input id="developer" class="form-control" formControlName="developer" />
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label" for="releaseDate">Release date</label>
+          <input id="releaseDate" type="date" class="form-control" formControlName="releaseDate" />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label" for="price">Price</label>
+          <input id="price" type="number" step="0.01" class="form-control" formControlName="price" [class.is-invalid]="isInvalid('price')" />
+          <div class="invalid-feedback">0 – 999.99</div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label" for="rating">Rating</label>
+          <input id="rating" type="number" class="form-control" formControlName="rating" [class.is-invalid]="isInvalid('rating')" />
+          <div class="invalid-feedback">0 – 100</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </button>
+      <a routerLink="/games" class="btn btn-link">Cancel</a>
+    </form>
+  }
+</div>
